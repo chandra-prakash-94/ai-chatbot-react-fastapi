@@ -26,7 +26,7 @@ export default function App() {
     setLoading(true)
 
     try {
-      const res = await fetch("http://localhost:8000/chat", {
+      const res = await fetch("https://solid-sniffle-9qxq66jv442xq59-8000.app.github.dev/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: userMessage.text })

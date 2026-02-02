@@ -7,11 +7,10 @@ from dotenv import load_dotenv
 load_dotenv()
 app = FastAPI()
 
-origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
+    allow_origin_regex=r"https://.*\.app\.github\.dev",
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
