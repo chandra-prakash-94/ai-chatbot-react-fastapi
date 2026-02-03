@@ -20,7 +20,7 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     response: str
 
-llm= init_chat_model("google_genai:gemini-2.5-flash-lite")
+llm= init_chat_model("google_genai:gemini-2.5-flash")
 
 # -------- API Endpoint --------
 @app.get("/")
@@ -30,10 +30,12 @@ async def root():
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
     try:
-        response_text = await llm.ainvoke(request.prompt)
+        response_text = await llm.ainvoke(request.prompt, tools=[{"google_search":{}}])
     except Exception as e:
         raise HTTPException(status_code=500, detail="Model request failed")
     return ChatResponse(response=response_text.content)
+
+##test123
 
 if __name__=="__main__":
     import uvicorn
