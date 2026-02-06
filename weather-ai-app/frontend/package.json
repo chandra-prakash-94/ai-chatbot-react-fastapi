@@ -12,8 +12,10 @@
   "dependencies": {
     "@copilotkit/react-core": "^1.51.3",
     "@copilotkit/react-ui": "^1.51.3",
+    "axios": "^1.13.4",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
