@@ -1,25 +1,24 @@
-import os
-from dotenv import load_dotenv
+# server.py
+import json
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from langchain.chat_models import init_chat_model
-
+import os
+from dotenv import load_dotenv
 load_dotenv()
 
 app = FastAPI()
 
-# Allow React frontend (very open for demo)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For PoC only
+    allow_origins=["*"],  # demo only
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Initialize model
 llm = init_chat_model(
     model="gemini-2.5-flash-lite",
     model_provider="google_genai",
@@ -27,16 +26,23 @@ llm = init_chat_model(
 )
 
 class ChatRequest(BaseModel):
-    message: str
+    messages: list
 
-@app.post("/chat")
+
+@app.post("/api/chat")
 async def chat(request: ChatRequest):
-    async def event_stream():
-        async for chunk in llm.astream(request.message):
+
+    async def stream():
+        user_message = request.messages[-1]["content"]
+
+        async for chunk in llm.astream(user_message):
             if chunk.content:
-                yield f"{chunk.content}\n\n"
-        yield "event: done\ndata: [DONE]\n\n"
-    return StreamingResponse(event_stream(), media_type="text/event-stream")
+                yield f"data: {json.dumps({'content': chunk.content})}\n\n"
+
+        yield "data: [DONE]\n\n"
+
+    return StreamingResponse(stream(), media_type="text/event-stream")
+
 
 if __name__ == "__main__":
     import uvicorn
