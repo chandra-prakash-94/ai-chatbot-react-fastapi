@@ -1,5 +1,0 @@
-ignoredBuiltDependencies:
-  - '@scarf/scarf'
-
-onlyBuiltDependencies:
-  - esbuild
