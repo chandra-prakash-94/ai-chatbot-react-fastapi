@@ -1,0 +1,9 @@
+{
+  "node_version": "20",
+  "graphs": {
+    "agent": "../lg_test/agent.py:app"
+  },
+  "ui": {
+    "agent": "./src/agent/ui.tsx"
+  }
+}
